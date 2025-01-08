@@ -197,12 +197,19 @@ $result = $a + $b; // 결과: 15 (정수로 변환)
    - 이는 타입스크립트가 자바스크립트의 런타임 에러를 사전에 방지하기 위해 설계되었기 때문입니다.
 
 <br>
-<br>
 
 ## 2-2. 타입스크립트의 타입 시스템
 
 
 ### 2-2-1. 타입 어노테이션 방식
+
+```ts
+let isDone: boolean = false;
+let decimal: number = 6;
+let color: string = "blue";
+let list: number[] = [1, 2, 3];
+let x: [string, number]; // tuple
+```
 
 1. **타입 어노테이션(Type Annotation) 개념**: 변수, 상수, 함수의 인자 또는 반환 값에 대해 타입을 명시적으로 선언하여 컴파일러에 저장될 값의 타입을 알려주는 문법.
 2. **타입스크립트의 특징**:
@@ -232,7 +239,78 @@ def greet(name: str) -> str:
 
 <br>
 
-### 2-2-2. 구조적 타이핑
+### 2-2-2. 구조적 타이핑(Structural Typing)
+
+1. **명목적 타입 시스템**:
+   - 대부분의 언어에서 값이나 객체는 하나의 구체적인 타입을 가짐.
+   - 타입은 이름으로 구분되며, 런타임 컴파일 이후에도 타입 정보가 유지됨.
+   - 명확한 상속 관계나 공통 인터페이스가 없으면 타입 간 호환이 불가능.
+
+2. **타입스크립트의 구조적 타이핑**:
+   - 타입스크립트는 이름이 아닌 **구조**로 타입을 구분.
+   - 객체의 속성과 구조가 동일하다면, 서로 다른 타입이라도 호환 가능.
+   - 이를 **구조적 타이핑(Structural Typing)**이라 부름.
+
+
+```ts
+interface Developer {
+  faceValue: number;
+}
+
+interface BankNote {
+  faceValue: number;
+}
+
+let developer: Developer = { faceValue: 52 };
+let bankNote: BankNote = { faceValue: 10000 };
+
+developer = bankNote; // OK
+bankNote = developer; // OK
+// Developer`와 `BankNote`라는 두 인터페이스가 동일한 구조(`faceValue: number`)를 가지므로, 서로 다른 타입임에도 값 할당이 가능.
+```
+
+```ts
+interface Rectangle {
+  width: number;
+  height: number;
+}
+
+interface Box {
+  width: number;
+  height: number;
+}
+
+let rect: Rectangle = { width: 10, height: 20 };
+let box: Box = { width: 15, height: 25 };
+
+rect = box; // OK
+box = rect; // OK
+// `Rectangle`과 `Box`는 이름이 다르지만, 구조가 동일하므로 서로 할당이 가능.
+```
+
+```ts
+interface Circle {
+  radius: number;
+}
+
+let circle: Circle = { radius: 10 };
+
+// rect = circle; // Error: 구조가 다르므로 호환되지 않음
+// circle = rect; // Error: 구조가 다르므로 호환되지 않음
+// `Rectangle`과 `Circle`은 구조가 다르기 때문에 서로 할당이 불가능.
+```
+
+```ts
+type Add = (a: number, b: number) => number;
+type Subtract = (x: number, y: number) => number;
+
+let add: Add = (a, b) => a + b;
+let subtract: Subtract = (x, y) => x - y;
+
+add = subtract; // OK
+subtract = add; // OK
+// 함수의 매개변수와 반환 타입이 동일하다면, 이름이 달라도 할당이 가능.
+```
 
 <br>
 
