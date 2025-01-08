@@ -14,7 +14,8 @@
   - **자바스크립트의 7가지 데이터 타입**: `string`, `number`, `boolean`, ``, `undefined`, `symbol`, `object`.
   - 타입스크립트는 자바스크립트에 타입 시스템을 추가하여, 코드의 안정성과 가독성을 높인다.
 
-```ts
+```js
+// 2.1.1-2.js
 // 문자열(string) 타입의 데이터를 변수 name에 할당
 const name = "zig"; // name 변수는 "zig"라는 문자열 값을 저장
 
@@ -35,6 +36,7 @@ const year = 2022; // year 변수는 2022라는 숫자 값을 저장
 **[타입을 정의한 경우]**
 
 ```ts
+// 2.1.2-1.ts
 // 변수에 타입을 명시적으로 정의
 const num: number = 123; // 숫자 타입
 const str: string = "abc"; // 문자열 타입
@@ -56,6 +58,7 @@ func(str);
 **[타입을 정의하지 않은 경우]**
 
 ```js
+// 2.1.2-2.js
 // 함수의 매개변수에 타입을 정의하지 않음
 function double(n) {
   return n * 2; // n이 숫자가 아니면 NaN 반환 가능
@@ -72,6 +75,7 @@ console.log(double("z"));
 **[타입을 정의한 경우]**
 
 ```ts
+// 2.1.2-3.ts
 // 함수의 매개변수에 타입을 정의
 function double(n: number): number {
   return n * 2; // n은 반드시 숫자 타입이어야 함
@@ -89,9 +93,38 @@ console.log(double("z"));
 
 ### 2-1-3. 정적타입과 동적타입
 
+- 타입을 결정하는 시점에 따라 프로그래밍 언어는 **정적 타입**과 **동적 타입**으로 구분됩니다.
+- 1. **정적 타입(Static Typing)**:
+  - **특징**:
+    - 모든 변수의 타입이 **컴파일 단계**에서 결정됩니다.
+    - 변수 선언 시 타입을 명시해야 하므로 초기 개발 속도가 느릴 수 있습니다.
+    - 컴파일 타임에 타입 에러를 발견할 수 있어, 프로그램의 안정성을 높일 수 있습니다.
+  - **관련 프로그래밍 언어**:
+    - Java, C, TypeScript 등
+- 2. **동적 타입 (Dynamic Typing)**:
+  - **특징**:
+    - 변수의 타입이 **런타임**에 결정됩니다.
+    - 개발자가 변수의 타입을 명시할 필요가 없습니다.
+    - 런타임 에러가 발생할 가능성이 높아질 수 있습니다.
+  - **관련 프로그래밍 언어**:
+    - JavaScript, Python 등
+  
+```js
+// 2.1.3-1.js
+// ㄴ 동적 타입 언어에서 런타임 에러가 발생할 수 있는 사례
+function multiplyByThree(number) { // `multiplyByThree` 함수는 매개변수 `number`의 타입을 명시하지 않았습니다.
+  return number * 3;
+}
+
+console.log(multiplyByThree(10)); // 30 (정상 동작)
+console.log(multiplyByThree("f")); // NaN (문자열과 숫자 연산으로 인해 Not-a-Number 발생)
+```
+
 <br>
 
 ### 2-1-4. 강타입과 약타입
+
+
 
 <br>
 
