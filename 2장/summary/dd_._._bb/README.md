@@ -480,7 +480,66 @@ printName(anotherPerson); // 출력: Bob
 
 <br>
 
-### 2-2-5. 구조적 타이핑의 결과
+### 2-2-5. 구조적 타이핑의 예상치 못한 결과
+
+- 구조적 타이핑은 객체의 형태(구조)에 따라 타입을 판단하는 방식으로, 추가 속성이 있는 객체도 허용될 수 있습니다. 이로 인해 타입 안정성이 떨어질 수 있는 상황이 발생할 수 있습니다.
+
+```ts
+interface Cube {
+  width: number;
+  height: number;
+  depth: number;
+}
+
+function addLines(c: Cube) {
+  let total = 0;
+  for (const axis of Object.keys(c)) {
+    // `Object.keys()`로 얻은 키는 문자열 배열(`string`)로 간주되며, 이는 타입스크립트가 `Cube` 타입의 키로 보장하지 않음. 따라서 `c[axis]` 접근 시 타입 에러가 발생.
+    const length = c[axis]; // 🚨 타입 에러 발생
+    total += length;
+  }
+}
+
+const namedCube = {
+  width: 6,
+  height: 5,
+  depth: 4,
+  name: "SweetCube", // 추가 속성
+};
+
+// 추가 속성이 있는 객체(`namedCube`)를 함수에 전달해도 타입스크립트는 이를 허용함.
+// 이는 구조적 타이핑의 유연성으로 인해 발생.
+addLines(namedCube); // ✅ OK (구조적 타이핑으로 인해 허용)
+```
+
+```ts
+type Cube = {
+  kind: "cube"; // 식별 가능한 속성 추가
+  width: number;
+  height: number;
+  depth: number;
+};
+
+function addLines(c: Cube) {
+  let total = 0;
+  for (const axis of ["width", "height", "depth"] as const) {
+    const length = c[axis]; // ✅ 타입 안전
+    total += length;
+  }
+}
+
+const namedCube = {
+  kind: "cube",
+  width: 6,
+  height: 5,
+  depth: 4,
+  name: "SweetCube", // 추가 속성
+};
+
+addLines(namedCube); // 🚨 타입 에러 (추가 속성 허용 안 됨)
+```
+
+- 이러한 한계를 극복하고자 타입스크립트에 명목적 타이핑 언어의 특징을 가미한 식별할 수 있는 유니온 과 같은 방법이 생겼다.
 
 <br>
 
