@@ -264,8 +264,8 @@ interface BankNote {
 let developer: Developer = { faceValue: 52 };
 let bankNote: BankNote = { faceValue: 10000 };
 
-developer = bankNote; // OK
-bankNote = developer; // OK
+developer = bankNote; // ✅ OK
+bankNote = developer; // ✅ OK
 // Developer`와 `BankNote`라는 두 인터페이스가 동일한 구조(`faceValue: number`)를 가지므로, 서로 다른 타입임에도 값 할당이 가능.
 ```
 
@@ -283,8 +283,8 @@ interface Box {
 let rect: Rectangle = { width: 10, height: 20 };
 let box: Box = { width: 15, height: 25 };
 
-rect = box; // OK
-box = rect; // OK
+rect = box; // ✅ OK
+box = rect; // ✅ OK
 // `Rectangle`과 `Box`는 이름이 다르지만, 구조가 동일하므로 서로 할당이 가능.
 ```
 
@@ -307,14 +307,115 @@ type Subtract = (x: number, y: number) => number;
 let add: Add = (a, b) => a + b;
 let subtract: Subtract = (x, y) => x - y;
 
-add = subtract; // OK
-subtract = add; // OK
+add = subtract; // ✅ OK
+subtract = add; // ✅ OK
 // 함수의 매개변수와 반환 타입이 동일하다면, 이름이 달라도 할당이 가능.
 ```
 
 <br>
 
-### 2-2-3. 구조적 서브타이핑
+### 2-2-3. 구조적 서브타이핑 (Structural Subtyping)
+
+- 구조적 서브타이핑은 객체의 **구조(속성)**를 기준으로 타입을 판단하는 방식입니다.  
+- 이름이 다른 타입이라도 **구조가 동일**하다면, 서로 호환 가능한 타입으로 간주됩니다.
+- **타입 계층 구조(상속 관계)에 얽매이지 않고, 객체의 속성만으로 판단합니다.**
+- 타입 간의 호환성은 **타입 이름**이 아닌 **구조**에 의해 결정됩니다.  
+
+**예시 코드**
+
+- **속성 기반 타입 호환성**:
+  ```ts
+  interface Pet {
+    name: string;
+  }
+
+  interface Cat {
+    name: string;
+    age: number;
+  }
+
+  let pet: Pet;
+  let cat: Cat = { name: "Zag", age: 2 };
+
+  // ✅ OK: Cat의 구조가 Pet의 구조를 포함하므로 호환 가능
+  pet = cat;
+  ```
+
+- **함수 매개변수에서의 구조적 타이핑**:
+  ```ts
+  interface Pet {
+    name: string;
+  }
+
+  let cat = { name: "Zag", age: 2 };
+
+  function greet(pet: Pet) {
+    console.log(`Hello, ${pet.name}`);
+  }
+
+  // ✅ OK: cat의 구조가 Pet의 구조를 포함하므로 함수 호출 가능
+  greet(cat);
+  ```
+
+  ```ts
+  interface Rectangle {
+    width: number;
+    height: number;
+  }
+
+  interface Square {
+    width: number;
+    height: number;
+    color: string;
+  }
+
+  let rect: Rectangle;
+  let square: Square = { width: 10, height: 10, color: "blue" };
+
+  // ✅ OK: Square의 구조가 Rectangle의 구조를 포함하므로 호환 가능
+  rect = square;
+
+  function calculateArea(shape: Rectangle) {
+    return shape.width * shape.height;
+  }
+
+  // ✅ OK: Square의 구조가 Rectangle의 구조를 포함하므로 함수 호출 가능
+  console.log(calculateArea(square)); // 100
+  ```
+
+- **클래스 간의 구조적 서브타이핑**:
+  ```ts
+  class Person {
+    name: string;
+    age: number;
+
+    constructor(name: string, age: number) {
+      this.name = name;
+      this.age = age;
+    }
+  }
+
+  class Developer {
+    name: string;
+    age: number;
+    sleepTime: number;
+
+    constructor(name: string, age: number, sleepTime: number) {
+      this.name = name;
+      this.age = age;
+      this.sleepTime = sleepTime;
+    }
+  }
+
+  function greet(p: Person) {
+    console.log(`Hello, I'm ${p.name}`);
+  }
+
+  const developer = new Developer("zig", 20, 7);
+
+  // ✅ OK: Developer의 구조가 Person의 구조를 포함하므로 호환 가능
+  greet(developer); // Hello, I'm zig
+  ```
 
 <br>
 
