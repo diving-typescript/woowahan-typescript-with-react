@@ -576,15 +576,15 @@ addLines(namedCube); // 🚨 타입 에러 (추가 속성 허용 안 됨)
 5. **정적 타입의 한계**:
    - 타입스크립트의 점진적 타입 시스템은 **정적 타입의 정확성을 100% 보장하지 않습니다**.
    - 모든 변수와 표현식의 타입을 컴파일 타임에 검사하지 않기 때문에, 런타임 에러가 발생할 수 있습니다.
-    ```ts
-    const names = ["zig", "colin"];
-    console.log(names[2].toUpperCase()); 
-    // 🚨 TypeError:
-    // `names[2]` 는 배열의 범위를 벗어난 인덱스를 참조하므로, `undefined` 를 반환합니다.
-    // `names[2]` 는 `undefined` 이기 때문에, 
-    // `toUpperCase()` 를 호출하려고 하면 런타임 에러(TypeError)가 발생합니다.
-    ```
-    - 이러한 타입 에러를 해결하는 방법에는 2가지가 있습니다:
+        ```ts
+        const names = ["zig", "colin"];
+        console.log(names[2].toUpperCase()); 
+        // 🚨 TypeError:
+        // `names[2]` 는 배열의 범위를 벗어난 인덱스를 참조하므로, `undefined` 를 반환합니다.
+        // `names[2]` 는 `undefined` 이기 때문에, 
+        // `toUpperCase()` 를 호출하려고 하면 런타임 에러(TypeError)가 발생합니다.
+        ```
+    - 이러한 타입 에러를 해결하는 방법에는 2가지가 있습니다.
         ```ts
         const names = ["zig", "colin"];
         // 배열의 특정 인덱스를 참조하기 전에 해당 인덱스가 유효한지 확인합니다.
