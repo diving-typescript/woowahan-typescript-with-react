@@ -239,7 +239,7 @@ def greet(name: str) -> str:
 
 <br>
 
-### 2-2-2. 구조적 타이핑(Structural Typing)
+### 2-2-2. [구조적 타이핑(Structural Typing)](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html#structural-type-system)
 
 1. **명목적 타입 시스템**:
    - 대부분의 언어에서 값이나 객체는 하나의 구체적인 타입을 가짐.
@@ -250,6 +250,16 @@ def greet(name: str) -> str:
    - 타입스크립트는 이름이 아닌 **구조**로 타입을 구분.
    - 객체의 속성과 구조가 동일하다면, 서로 다른 타입이라도 호환 가능.
    - 이를 **구조적 타이핑(Structural Typing)**이라 부름.
+
+```ts
+type User = {
+  name: string;
+  age: number;
+};
+
+const user: User = { name: "홍길동", age: 30, address: "서울" }; // ✅ OK 
+// 구조적 타이핑은 객체의 필드가 추가로 포함되어 있어도 문제없이 동작합니다.
+```
 
 
 ```ts
@@ -280,20 +290,17 @@ interface Box {
   height: number;
 }
 
-let rect: Rectangle = { width: 10, height: 20 };
-let box: Box = { width: 15, height: 25 };
-
-rect = box; // ✅ OK
-box = rect; // ✅ OK
-// `Rectangle`과 `Box`는 이름이 다르지만, 구조가 동일하므로 서로 할당이 가능.
-```
-
-```ts
 interface Circle {
   radius: number;
 }
 
+let rect: Rectangle = { width: 10, height: 20 };
+let box: Box = { width: 15, height: 25 };
 let circle: Circle = { radius: 10 };
+
+rect = box; // ✅ OK
+box = rect; // ✅ OK
+// `Rectangle`과 `Box`는 이름이 다르지만, 구조가 동일하므로 서로 할당이 가능.
 
 // rect = circle; // 🚨 Error: 구조가 다르므로 호환되지 않음
 // circle = rect; // 🚨 Error: 구조가 다르므로 호환되지 않음
@@ -354,6 +361,7 @@ subtract = add; // ✅ OK
   }
 
   // ✅ OK: cat의 구조가 Pet의 구조를 포함하므로 함수 호출 가능
+  // ㄴ cat은 Pet 타입에 정의되지 않은 age 필드를 가지고 있지만, name 필드가 일치하기 때문에 타입체크를 통과합니다.
   greet(cat);
   ```
 
@@ -373,6 +381,7 @@ subtract = add; // ✅ OK
   let square: Square = { width: 10, height: 10, color: "blue" };
 
   // ✅ OK: Square의 구조가 Rectangle의 구조를 포함하므로 호환 가능
+  // ㄴ 객체에 추가적인 필드가 있어도 무시되며, 필요한 필드만 일치하면 타입이 호환된다고 간주합니다.
   rect = square;
 
   function calculateArea(shape: Rectangle) {
@@ -421,10 +430,10 @@ subtract = add; // ✅ OK
 
 ### 2-2-4. 자바스크립트를 닮은 타입스크립트
 
-1. **타입스크립트의 구조적 타이핑**: 
+1. **타입스크립트의 구조적 타이핑**:
    - 타입스크립트는 객체나 함수의 **구조**를 기반으로 타입을 검사합니다. 이는 자바스크립트의 동작(덕 타이핑)을 모델링한 결과입니다.
    - 타입스크립트는 자바스크립트의 덕 타이핑 개념을 모델링하면서도 정적 타이핑의 장점을 제공합니다.
-2. **덕 타이핑**: "어떤 값이 올바르게 동작한다면, 그 값이 어떻게 만들어졌는지는 중요하지 않다"는 개념으로, 런타임에 타입을 검사합니다.
+2. **덕 타이핑**: **"만약 어떤 객체가 특정 구조를 가진다면, 그것은 그 타입으로 간주될 수 있다**"는 개념으로, 런타임에 타입을 검사합니다.
 3. **구조적 타이핑 vs 덕 타이핑**:
    - **구조적 타이핑**: 컴파일 타임에 타입을 검사 (정적 타이핑).
    - **덕 타이핑**: 런타임에 타입을 검사 (동적 타이핑).
@@ -690,3 +699,84 @@ function add(a: number, b: number): number { // `a: number`와 `b: number`는 �
 ### 2-4-5. `function`
 
 <br>
+
+## 더 나아가서
+
+### **선택적 속성과 구조적 타이핑**
+
+```ts
+interface UserProfile {
+  name: string;
+  age?: number; // 선택적 속성
+}
+
+const UserCard: React.FC<UserProfile> = ({ name, age }) => {
+  return (
+    <div>
+      <h1>{name}</h1>
+      {age && <p>Age: {age}</p>}
+    </div>
+  );
+};
+
+const App = () => {
+  return <UserCard name="Alice" />;
+};
+```
+
+### **컴포넌트 Props 검증**
+
+React 컴포넌트의 Props를 정의할 때 구조적 타이핑을 활용하면, Props의 형태만 맞으면 타입이 자동으로 호환됩니다.
+
+```ts
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+}
+
+const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
+  return <button onClick={onClick}>{label}</button>;
+};
+
+// 구조적 타이핑을 활용한 Props 전달
+const App = () => {
+  const handleClick = () => alert("Button clicked!");
+
+  const buttonProps = { label: "Click Me", onClick: handleClick }; 
+  return <Button {...buttonProps} />; // ✅ OK - 구조적으로 동일한 객체를 전달하면 타입이 호환됨
+};
+```
+
+
+### **HOC(Higher-Order Component)와의 통합**
+
+HOC를 작성할 때 구조적 타이핑을 사용하면, 원래 컴포넌트의 Props를 유지하면서 추가적인 Props를 확장할 수 있습니다.
+
+```ts
+type WithLoadingProps = {
+  isLoading: boolean;
+};
+
+function withLoading<P>(Component: React.ComponentType<P>) {
+  return (props: P & WithLoadingProps) => {
+    if (props.isLoading) return <div>로딩 중...</div>;
+    return <Component {...props} />;
+  };
+}
+```
+
+### **제네릭(Generic)과의 조합**
+
+```ts
+type ListProps<T> = {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+};
+
+function List<T>({ items, renderItem }: ListProps<T>) {
+  return <ul>{items.map(renderItem)}</ul>;
+}
+
+// 사용 예시
+<List items={[1, 2, 3]} renderItem={(item) => <li key={item}>{item}</li>} />;
+```
