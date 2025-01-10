@@ -640,9 +640,77 @@ function add(a: number, b: number): number { // `a: number`와 `b: number`는 �
 
 ### 2-2-8. 값 vs 타입
 
+- 
+
 <br>
 
 ### 2-2-9. 타입을 확인하는 방법
+
+1. **타입 확인 방법**
+   - `typeof`, `instanceof`, 타입 단언, 타입 가드를 사용하여 타입을 확인할 수 있다.
+
+2. **값 공간과 타입 공간**
+   - 타입스크립트에는 **값 공간**과 **타입 공간**이 별도로 존재한다.
+   - `typeof` 연산자는 값 공간과 타입 공간에서 다르게 동작한다.
+
+3. **typeof 연산자**
+   - 값 공간에서:
+     ```ts
+     const v1 = typeof person; // 값은 'object'
+     const v2 = typeof email; // 값은 'function'
+     ```
+   - 타입 공간에서:
+     ```ts
+     type T1 = typeof person; // 타입은 Person
+     type T2 = typeof email; // 타입은 (options: { person: Person; subject: string; body: string }) => void
+     ```
+
+4. **자바스크립트 클래스와 typeof**
+   - 자바스크립트 클래스는 값 공간에서 `typeof`를 사용하면 `'function'`으로 평가된다.
+   - 타입 공간에서 `typeof`를 사용하면 생성자 함수의 타입을 반환한다.
+     ```ts
+     class Developer {
+       name: string;
+       sleepingTime: number;
+       constructor(name: string, sleepingTime: number) {
+         this.name = name;
+         this.sleepingTime = sleepingTime;
+       }
+     }
+     const d = typeof Developer; // 값이 'function'
+     type T = typeof Developer; // 타입이 typeof Developer
+     const zig: Developer = new Developer("zig", 7);
+     type ZigType = typeof zig; // 타입이 Developer
+     ```
+
+5. **instanceof 연산자**
+   - 자바스크립트에서 `instanceof`는 프로토타입 체이닝을 통해 생성자의 프로토타입 속성이 존재하는지 확인한다.
+     ```ts
+     let error: unknown;
+     if (error instanceof Error) {
+       showAlertModal(error.message);
+     } else {
+       throw Error(error);
+     }
+     ```
+
+6. **타입 단언 (Type Assertion)**
+   - `as` 키워드를 사용하여 타입을 강제할 수 있다.
+      ```ts
+      const input: unknown = "TypeScript";
+
+      const length = (input as string).length; // 타입 단언으로 string으로 강제
+      console.log(length); // 10
+      ```
+   - 개발자가 해당 값의 타입을 더 잘 알고 있을 때 사용하며, 강제 형변환과 유사하다.
+     ```ts
+     const loaded_text: unknown; // 어딘가에서 unknown 타입 값을 전달받았다고 가정
+     const validateInputText = (text: string) => {
+       if (text.length < 10) return "최소 10글자 이상 입력해야 합니다.";
+       return "정상 입력된 값입니다.";
+     };
+     validateInputText(loaded_text as string); // as 키워드를 사용하지 않으면 컴파일 에러 발생
+     ```
 
 <br>
 
