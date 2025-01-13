@@ -38,8 +38,7 @@
 
 ## 알고리즘
 
-- [ ] [Two Sum](https://github.com/diving-typescript/woowahan-typescript-with-react/tree/master/1%EC%9E%A5/algorithms/two-sum)
-
+- [ ] [Two Sum](https://github.com/diving-typescript/woowahan-typescript-with-react/tree/master/algorithms/two-sum)
 
 
 <br>
