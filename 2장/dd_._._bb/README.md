@@ -640,7 +640,125 @@ function add(a: number, b: number): number { // `a: number`와 `b: number`는 �
 
 ### 2-2-8. 값 vs 타입
 
-- 
+1. **값의 정의**  
+   - 값은 프로그램이 처리하기 위해 메모리에 저장되는 모든 데이터로, 프로그램에서 조작 가능한 표현이다.  
+   - 자바스크립트에서 함수도 값이며, 객체로 변환된다.
+
+2. **타입스크립트와 타입**  
+   - 타입스크립트는 타입을 명시할 수 있는 기능을 제공하며, `:type` 형태로 변수, 매개변수, 객체 속성 등에 타입을 지정하거나 `type` 또는 `interface`로 커스텀 타입을 정의할 수 있다.  
+   - 값 공간과 타입 공간의 이름은 충돌하지 않는다. 이는 타입스크립트가 자바스크립트의 슈퍼셋이기 때문이다.
+
+3. **타입스크립트 문법과 런타임**  
+   - 타입스크립트의 타입 선언은 컴파일 시 제거되므로 런타임에는 값 공간과 타입 공간이 충돌하지 않는다.  
+   - 타입은 `:` 또는 `as`로 선언하며, 값은 `=`으로 할당한다.
+
+4. **값과 타입 공간에 동시에 존재하는 심볼**  
+   - 클래스와 `enum`은 값과 타입 공간 모두에 존재한다.  
+   - 클래스는 런타임에 객체로 변환되며, 타입으로도 사용 가능하다.  
+   - `enum`은 런타임에 실제 객체로 변환되며, 값과 타입을 모두 제공한다.
+
+### 예제 코드 설명
+
+#### 1. **타입 명시**
+```ts
+function email({
+  person,
+  subject,
+  body,
+}: {
+  person: Person;
+  subject: string;
+  body: string;
+}) {
+  // ...
+}
+```
+- `person`, `subject`, `body`의 타입을 명시적으로 지정.  
+- 런타임에서는 타입 정보가 제거되고 순수 자바스크립트 코드만 남는다.
+
+#### 2. **클래스의 이중 역할**
+```ts
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
+const rect1 = new Rectangle(5, 4);
+```
+- `Rectangle`은 타입으로 사용 가능하며, 런타임에는 객체로 변환되어 값으로도 사용된다.
+
+
+#### 3. **Enum의 이중 역할**
+```ts
+enum Direction {
+  Up, // 0
+  Down, // 1
+  Left, // 2
+  Right, // 3
+}
+```
+- `Direction`은 타입으로 사용 가능하며, 런타임에는 객체로 변환된다.  
+- 변환된 자바스크립트 코드:
+```js
+let Direction;
+(function (Direction) {
+  Direction[(Direction.Up = 0)] = "Up";
+  Direction[(Direction.Down = 1)] = "Down";
+  Direction[(Direction.Left = 2)] = "Left";
+  Direction[(Direction.Right = 3)] = "Right";
+}(Direction || (Direction = {})));
+```
+
+#### 4. **Enum의 값 공간 활용**
+```ts
+enum MyColors {
+  BLUE = "#0000FF",
+  YELLOW = "#FFFF00",
+  MINT = "#2AC1BC",
+}
+
+function whatMintColor(palette: { MINT: string }) {
+  return palette.MINT;
+}
+
+whatMintColor(MyColors); // ✅
+```
+- `MyColors`는 값으로 사용되며, 런타임에 실제 객체로 존재한다.
+
+
+### 추가 예제: 클래스와 Enum의 이중 역할
+
+#### 클래스
+```ts
+class Animal {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+const dog = new Animal("Dog"); // 값으로 사용
+type AnimalType = Animal; // 타입으로 사용
+```
+
+#### Enum
+```ts
+enum Status {
+  Active = "ACTIVE",
+  Inactive = "INACTIVE",
+}
+
+function checkStatus(status: Status) {
+  if (status === Status.Active) {
+    console.log("Status is active.");
+  }
+}
+
+checkStatus(Status.Active); // 값으로 사용
+type StatusType = Status; // 타입으로 사용
+```
 
 <br>
 
