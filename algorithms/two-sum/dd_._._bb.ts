@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param nums 
+ * @param target 
+ * @returns 
+ */
 function twoSum(nums, target) {
     const numMap = new Map();
     for (let i = 0; i < nums.length; i++) {
