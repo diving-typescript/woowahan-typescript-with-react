@@ -1,15 +1,9 @@
-/**
- * 
- * @param nums 
- * @param target 
- * @returns 
- */
-function twoSum(nums, target) {
-    const numMap = new Map();
+function twoSum(nums: number[], target: number):number[] {
+    const numMap = new Map<number, number>();
     for (let i = 0; i < nums.length; i++) {
         const complement = target - nums[i];
         if (numMap.has(complement)) {
-            return [numMap.get(complement), i];
+            return [numMap.get(complement)!, i];
         }
         numMap.set(nums[i], i);
     }
