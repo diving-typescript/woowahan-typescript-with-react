@@ -26,8 +26,8 @@
 | ✅ | 7주차  | 6장 타입스크립트 컴파일                       |  |
 | ✅ | 8주차  | 7장 비동기 호출                               | [String Compression](https://leetcode.com/problems/string-compression?envType=study-plan-v2&envId=leetcode-75) |
 | ✅ | 9주차  | 8장 JSX에서 TSX로                             |  |
-|   | 10주차 | 9장 훅                                       |  |
-|   | 11주차 | 10장 상태 관리                                | |
+| ✅ | 10주차 | 9장 훅                                       |  |
+| ✅ | 11주차 | 10장 상태 관리                                | |
 |   | 12주차 | 11장 CSS-in-JS                                |  |
 |   | 13주차 | 12장 타입스크립트 프로젝트 관리               |  |
 |   | 14주차 | 13장 타입스크립트와 객체 지향                 | |
